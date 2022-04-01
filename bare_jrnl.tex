@@ -59,10 +59,25 @@ The main purpose of Chord is very simple in its mission, \textit{provided a key,
 return the node that is responsible for the key}. We use this property to implement the map reduce functionality
 and route events to their correct nodes.
 
-\subsection{Scaling}
+\subsection{Map Reduce Modifications}
+On top of the existing Chord implementation, we will modify it 
+to support the map reduce functionality. Instead of the traditional setting
+of value to a node, there will be new methods that acts as operators. For example
+instead of \texttt{setValue(value)} and letting Chord handle the corresponding node,
+we will have \texttt{sumOperator(value)} and let Chord set the value, and instruct the
+node to perform the sum operation. Similarly, we could have custom operators to perform
+any actions needed, as it will be chained as a secondary set to after storing the data in their
+corresponding nodes.
 
-\subsubsection*{Phase 1}
-\subsubsection*{Phase 2}
-\subsubsection*{Phase 3}
+\subsection{Result sink}
+The result sink is a new sink that will be used to store the results of the map reduce operation. Since
+we want to minimize the need for network activity, all results will be fed into a single node. This node
+will be known as the \texttt{sink node}, and will be responsible for storing the results. This node does
+not participate within the ring, and can be seen as a seperate entity that is soley responsible for accepting
+results and perform de-duplication and aggregation. This part of design is currently in its infant stage, as
+having a single node responsible for result inherently introduces risk of failure.
+
+\subsection{Data flow topology}
+
 
 \end{document}
