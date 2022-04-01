@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2022/dev) (preloaded format=pdflatex 2022.3.30)  31 MAR 2022 22:43
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2022/dev) (preloaded format=pdflatex 2022.3.30)  1 APR 2022 14:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**"/Users/baiqing/Documents/Design Doc/bare_jrnl.tex"
-(/Users/baiqing/Documents/Design Doc/bare_jrnl.tex
+**"/Users/baiqing/Documents/Design Doc/design.tex"
+(/Users/baiqing/Documents/Design Doc/design.tex
 LaTeX2e <2021-11-15> patch level 1
 L3 programming layer <2022-02-24> (./IEEEtran.cls
 Document Class: IEEEtran 2015/08/26 V1.8b by Michael Shell
@@ -123,8 +123,8 @@ File: pdftex.def 2020/10/05 v1.2a Graphics/color driver for pdftex
 File: l3backend-pdftex.def 2022-02-07 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count266
 \l__pdf_internal_box=\box52
-) (./bare_jrnl.aux)
-\openout1 = `bare_jrnl.aux'.
+) (./design.aux)
+\openout1 = `design.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 8.
 LaTeX Font Info:    ... okay on input line 8.
@@ -188,23 +188,29 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 66.
  (/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
-) [1{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
+)
+<topology.png, id=1, 383.4325pt x 345.29pt>
+File: topology.png Graphic file (type png)
+<use topology.png>
+Package pdftex.def Info: topology.png  used on input line 86.
+(pdftex.def)             Requested size: 153.37029pt x 138.11354pt.
+ [1{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 
-] (./bare_jrnl.aux) ) 
+ <./topology.png>] (./design.aux) ) 
 Here is how much of TeX's memory you used:
- 2713 strings out of 478276
- 49991 string characters out of 5846490
- 349600 words of memory out of 5000000
- 20916 multiletter control sequences out of 15000+600000
+ 2724 strings out of 478276
+ 50133 string characters out of 5846490
+ 350597 words of memory out of 5000000
+ 20926 multiletter control sequences out of 15000+600000
  503471 words of font info for 83 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 60i,6n,67p,242b,175s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 60i,6n,67p,239b,175s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/texlive/2021/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on bare_jrnl.pdf (1 page, 63501 bytes).
+Output written on design.pdf (1 page, 80425 bytes).
 PDF statistics:
- 34 PDF objects out of 1000 (max. 8388607)
- 20 compressed objects within 1 object stream
+ 37 PDF objects out of 1000 (max. 8388607)
+ 21 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 6 words of extra memory for PDF output out of 10000 (max. 10000000)
 
