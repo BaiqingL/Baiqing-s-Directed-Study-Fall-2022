@@ -1,0 +1,68 @@
+\documentclass[journal]{IEEEtran}
+
+\ifCLASSINFOpdf
+  \usepackage[pdftex]{graphicx}
+\else
+\fi
+
+\begin{document}
+\title{Scalable Data Stream Processor}
+\author{Baiqing Lyu \\Boston University}
+\maketitle
+
+\begin{abstract}
+This document lays out the inspiration for a scalable data stream processor.
+It is a general framework for data stream processing, which can be used to
+build a wide variety of data processing applications. The uniqueness of this
+framework is that it is designed to be scalable, and it is designed to be used
+in a distributed environment.
+\end{abstract}
+
+\section{Introduction}
+
+\IEEEPARstart{T}{he} current state of the art in data stream processing is software 
+frameworks like Apache Flink, Apache Spark, and Apache Storm. These frameworks require
+the data pipeline to restart every time a scaling decision has to be made. This inspired
+our idea of creating a data stream processor that requires no down time when scaling up
+and down, as in a real life production scenario it would happen frequently as high 
+and low traffic hours emerge during the day.
+
+\hfill March 31, 2022
+
+\section{Design}
+
+\subsection{Requirements}
+Being able to scale up and down without downtime is a fundamental requirement for 
+this data stream processor. It would also need to deliver \textbf{at least once} 
+processing guarantees when ingesting incoming data. Current scope is to focus on the
+feasibility of a data stream processor that can be used in a distributed environment.
+\subsection{Goals}
+1. Create MVP of a distributed networks that allow nodes to come in and out of the 
+network.
+
+2. Give the ability to input data into the network and have a sink that can recieve 
+the output.
+
+3. Develop a MVP of a data stream processor that can support easy map reduce operations 
+(i.e. wordcount)
+\subsection{Software Design}
+
+We will initially use the Chord protocol to manage the way that nodes communicate with each other. 
+Chord creates a ring structure for the nodes and provies the ability to map a given key to some node.
+
+As Chord supports the operation of load balancing in addition to mapping keys to nodes and controlling
+the behavior when the nodes are down, it is very helpful as the baseline for the data stream processor.
+The usage of finger tables within Chord provides a robust way to handle arbritrary node failures. In addition,
+this can also handle the scale up and down of nodes within the processor.
+
+The main purpose of Chord is very simple in its mission, \textit{provided a key, the protocol will
+return the node that is responsible for the key}. We use this property to implement the map reduce functionality
+and route events to their correct nodes.
+
+\subsection{Scaling}
+
+\subsubsection*{Phase 1}
+\subsubsection*{Phase 2}
+\subsubsection*{Phase 3}
+
+\end{document}
