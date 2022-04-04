@@ -6,7 +6,7 @@
 \fi
 
 \begin{document}
-\title{Scalable Data Stream Processor}
+\title{Re-configurable Data Stream Processor}
 \author{Baiqing Lyu \\Boston University}
 \maketitle
 
@@ -21,8 +21,9 @@ in a distributed environment.
 \section{Introduction}
 
 \IEEEPARstart{T}{he} current state of the art in data stream processing is software 
-frameworks like Apache Flink, Apache Spark, and Apache Storm. These frameworks require
-the data pipeline to restart every time a scaling decision has to be made. This inspired
+frameworks like Apache Flink, Apache Spark, and Apache Storm. These frameworks all require 
+in some capacity a centralized component in its data pipeline. That often leads to a potential
+single point of failure or ease of congestion that creates bottlenecks during production. This inspired
 our idea of creating a data stream processor that requires no down time when scaling up
 and down, as in a real life production scenario it would happen frequently as high 
 and low traffic hours emerge during the day.

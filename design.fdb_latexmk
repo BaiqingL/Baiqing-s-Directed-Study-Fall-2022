@@ -1,6 +1,6 @@
 # Fdb version 3
-["pdflatex"] 1648839538 "/Users/baiqing/Documents/Design Doc/design.tex" "design.pdf" "design" 1648839538
-  "/Users/baiqing/Documents/Design Doc/design.tex" 1648839537 4339 55f1f394e996595ed49f5fc6c741ce6c ""
+["pdflatex"] 1649099005 "/Users/baiqing/Documents/Design Doc/design.tex" "design.pdf" "design" 1649099006
+  "/Users/baiqing/Documents/Design Doc/design.tex" 1649099004 4461 a2972c1a0010e433f89c394d9da7efcf ""
   "/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2021/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2021/texmf-dist/fonts/tfm/adobe/courier/pcrr7t.tfm" 1136768653 960 379cc0019370a9e0208a0a3f949f847a ""
@@ -50,8 +50,8 @@
   "/usr/local/texlive/2021/texmf-var/web2c/pdftex/pdflatex.fmt" 1648621948 2826214 99202999ed065d4b7337010692bbfe46 ""
   "/usr/local/texlive/2021/texmf.cnf" 1616695596 577 4c1911a7228e554c6032256d3cf5567d ""
   "IEEEtran.cls" 1648765702 281957 5b2e4fa15b0f7eabb840ebf67df4c0f7 ""
-  "design.aux" 1648839538 930 cfc40c3346a1696250d55d1de5c679b4 "pdflatex"
-  "design.tex" 1648839537 4339 55f1f394e996595ed49f5fc6c741ce6c ""
+  "design.aux" 1649099006 930 417411f29e6d0755a36eb917e87d1d7d "pdflatex"
+  "design.tex" 1649099004 4461 a2972c1a0010e433f89c394d9da7efcf ""
   "topology.png" 1648839220 25531 6ef79739999d28848d981d2b26604429 ""
   (generated)
   "design.aux"
