@@ -34,36 +34,38 @@ and low traffic hours emerge during the day.
 
 \subsection{Requirements}
 Being able to scale up and down without downtime is a fundamental requirement for 
-this data stream processor. It would also need to deliver \textbf{at least once} 
-processing guarantees when ingesting incoming data. Current scope is to focus on the
-feasibility of a data stream processor that can be used in a distributed environment.
+this data stream processor. In addition, the processor should be decentralized in 
+its workers and enable fast failure recovery if a node were to suddenly disconnect.
+It would also need to deliver \textbf{at least once} processing guarantees when 
+ingesting incoming data. Current scope is to focus on the feasibility of a data 
+stream processor that can be used in a distributed environment.
 \subsection{Goals}
 1. Create MVP of a distributed networks that allow nodes to come in and out of the 
 network.
 
-2. Give the ability to input data into the network and have a sink that can recieve 
+2. Give the ability to input data into the dataflow and have a sink that can recieve 
 the output.
 
 3. Develop a MVP of a data stream processor that can support easy map reduce operations 
 (i.e. wordcount)
 \subsection{Software Design}
 
-We will initially use the Chord protocol to manage the way that nodes communicate with each other. 
+The dataflow network design is inspired by Chord, an implementation of a distributed hash table(DHT). 
 Chord creates a ring structure for the nodes and provies the ability to map a given key to some node.
 
-As Chord supports the operation of load balancing in addition to mapping keys to nodes and controlling
+As the Chord protocol supports the operation of load balancing in addition to mapping keys to nodes and controlling
 the behavior when the nodes are down, it is very helpful as the baseline for the data stream processor.
 The usage of finger tables within Chord provides a robust way to handle arbritrary node failures. In addition,
 this can also handle the scale up and down of nodes within the processor.
 
 The main purpose of Chord is very simple in its mission, \textit{provided a key, the protocol will
-return the node that is responsible for the key}. We use this property to implement the map reduce functionality
-and route events to their correct nodes.
+return the node that is responsible for the key}. We use this property to back state operators so that
+when workers enter the ring or unexpectedly leaves, the state is still preserved and can be recovered.
 
 \subsection{Map Reduce Modifications}
 On top of the existing Chord implementation, we will modify it 
 to support the map reduce functionality. Instead of the traditional setting
-of value to a node, there will be new methods that acts as operators. For example
+of value to a node, there will be new methods that act as operators. For example
 instead of \texttt{setValue(value)} and letting Chord handle the corresponding node,
 we will have \texttt{sumOperator(value)} and let Chord set the value, and instruct the
 node to perform the sum operation. Similarly, we could have custom operators to perform
