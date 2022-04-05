@@ -23,23 +23,21 @@ in a distributed environment.
 \IEEEPARstart{T}{he} current state of the art in data stream processing is software 
 frameworks like Apache Flink, Apache Spark, and Apache Storm. These frameworks all require 
 in some capacity a centralized component in its data pipeline. That often leads to a potential
-single point of failure or ease of congestion that creates bottlenecks during production. This inspired
-our idea of creating a data stream processor that requires no down time when scaling up
-and down, as in a real life production scenario it would happen frequently as high 
-and low traffic hours emerge during the day.
+single point of failure or ease of congestion that creates bottlenecks during production. The idea
+is to create a stream processor that has a certain tradeoff which can be expressed of having a bit higher
+latency than systems like Apache Flink, but lower than Apache Spark, including better scalability than those
+frameworks in addition to having capabilities for re-configuration.
 
 \hfill March 31, 2022
 
-\section{Design}
-
-\subsection{Requirements}
+\section{Requirements}
 Being able to scale up and down without downtime is a fundamental requirement for 
 this data stream processor. In addition, the processor should be decentralized in 
 its workers and enable fast failure recovery if a node were to suddenly disconnect.
 It would also need to deliver \textbf{at least once} processing guarantees when 
 ingesting incoming data. Current scope is to focus on the feasibility of a data 
 stream processor that can be used in a distributed environment.
-\subsection{Goals}
+\section{Goals}
 1. Create MVP of a distributed networks that allow nodes to come in and out of the 
 network.
 
@@ -48,7 +46,7 @@ the output.
 
 3. Develop a MVP of a data stream processor that can support easy map reduce operations 
 (i.e. wordcount)
-\subsection{Software Design}
+\section{Software Design}
 
 The dataflow network design is inspired by Chord, an implementation of a distributed hash table(DHT). 
 Chord creates a ring structure for the nodes and provies the ability to map a given key to some node.
@@ -62,7 +60,7 @@ The main purpose of Chord is very simple in its mission, \textit{provided a key,
 return the node that is responsible for the key}. We use this property to back state operators so that
 when workers enter the ring or unexpectedly leaves, the state is still preserved and can be recovered.
 
-\subsection{Map Reduce Modifications}
+\section{Map Reduce Modifications}
 On top of the existing Chord implementation, we will modify it 
 to support the map reduce functionality. Instead of the traditional setting
 of value to a node, there will be new methods that act as operators. For example
@@ -72,7 +70,7 @@ node to perform the sum operation. Similarly, we could have custom operators to 
 any actions needed, as it will be chained as a secondary set to after storing the data in their
 corresponding nodes.
 
-\subsection{Result sink}
+\section{Result sink}
 The result sink is a new sink that will be used to store the results of the map reduce operation. Since
 we want to minimize the need for network activity, all results will be fed into a single node. This node
 will be known as the \texttt{sink node}, and will be responsible for storing the results. This node does
@@ -84,7 +82,7 @@ In addition to an independent result sink, there is also a per node independent 
 if the data does not need to be aggregated or de-duplicated. This would then resolve the single point of
 failure issue and allow for a more robust sinking mechanism for the stream processor.
 
-\subsection{Data flow topology}
+\section{Data flow topology}
 
 \includegraphics[scale=0.4]{topology}
 
