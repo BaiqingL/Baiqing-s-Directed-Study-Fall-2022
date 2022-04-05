@@ -51,7 +51,7 @@ the output.
 \end{enumerate}
 \section{Software Design}
 
-The dataflow network design is inspired by Chord, an implementation of a distributed hash table(DHT). 
+The dataflow network design is inspired by Chord, an implementation of a distributed hash table\ (DHT). 
 Chord creates a ring structure for the nodes and provies the ability to map a given key to some node.
 
 As the Chord protocol supports the operation of load balancing in addition to mapping keys to nodes and controlling
@@ -63,14 +63,13 @@ The main purpose of Chord is very simple in its mission, \textit{provided a key,
 return the node that is responsible for the key}. We use this property to back state operators so that
 when workers enter the ring or unexpectedly leaves, the state is still preserved and can be recovered.
 
-\section{Map Reduce Modifications}
-Using the DHT implementation specified by Chord, we will modify it 
-to support the map reduce functionality. Instead of the traditional setting
-of value to a node, there will be new methods that act as operators. For example
-instead of \texttt{setValue(value)} and letting Chord handle the corresponding node,
-we will have \texttt{sumOperator(value)} and let Chord set the value, and instruct the
-node to perform the sum operation. Similarly, we could have custom operators to perform
-any actions needed, as it will be chained as a secondary set to after storing the data in their
+\section{Modifications}
+Using the DHT implementation specified by Chord, we will modify it to support the map reduce 
+functionality. Instead of the traditional setting of value to a node, there will be new methods 
+that act as operators. For example instead of \texttt{setValue(value)} and letting Chord handle 
+the corresponding node, we will have \texttt{sumOperator(value)} and let Chord set the value, 
+and instruct the node to perform the sum operation. Similarly, we could have custom operators to 
+perform any actions needed, as it will be chained as a secondary set to after storing the data in their
 corresponding nodes.
 
 \section{Result sink}
