@@ -38,14 +38,17 @@ It would also need to deliver \textbf{at least once} processing guarantees when
 ingesting incoming data. Current scope is to focus on the feasibility of a data 
 stream processor that can be used in a distributed environment.
 \section{Goals}
-1. Create MVP of a distributed networks that allow nodes to come in and out of the 
-network.
 
-2. Give the ability to input data into the dataflow and have a sink that can recieve 
+\begin{enumerate}
+\item Create MVP of a ring dataflow backend that allow nodes to come in and out of the 
+data processor.
+
+\item Give the ability to input data into the dataflow and have a sink that can recieve 
 the output.
 
-3. Develop a MVP of a data stream processor that can support easy map reduce operations 
+\item Develop a MVP of a data stream processor that can support easy map reduce operations 
 (i.e. wordcount)
+\end{enumerate}
 \section{Software Design}
 
 The dataflow network design is inspired by Chord, an implementation of a distributed hash table(DHT). 
@@ -61,7 +64,7 @@ return the node that is responsible for the key}. We use this property to back s
 when workers enter the ring or unexpectedly leaves, the state is still preserved and can be recovered.
 
 \section{Map Reduce Modifications}
-On top of the existing Chord implementation, we will modify it 
+Using the DHT implementation specified by Chord, we will modify it 
 to support the map reduce functionality. Instead of the traditional setting
 of value to a node, there will be new methods that act as operators. For example
 instead of \texttt{setValue(value)} and letting Chord handle the corresponding node,
