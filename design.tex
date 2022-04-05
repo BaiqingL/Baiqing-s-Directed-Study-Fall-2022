@@ -11,11 +11,11 @@
 \maketitle
 
 \begin{abstract}
-This document lays out the inspiration for a scalable data stream processor.
+This document lays out the inspiration for a re-configurable data stream processor.
 It is a general framework for data stream processing, which can be used to
 build a wide variety of data processing applications. The uniqueness of this
-framework is that it is designed to be scalable, and it is designed to be used
-in a distributed environment.
+framework is that it is designed to be re-configurable, and supports better scalability
+and fault tolerance for stateful applications compared to current industry standard solutions.
 \end{abstract}
 
 \section{Introduction}
@@ -24,9 +24,9 @@ in a distributed environment.
 frameworks like Apache Flink, Apache Spark, and Apache Storm. These frameworks all require 
 in some capacity a centralized component in its data pipeline. That often leads to a potential
 single point of failure or ease of congestion that creates bottlenecks during production. The idea
-is to create a stream processor that has a certain tradeoff which can be expressed of having a bit higher
-latency than systems like Apache Flink, but lower than Apache Spark, including better scalability than those
-frameworks in addition to having capabilities for re-configuration.
+is to create a stream processor that has a certain tradeoff which can be expressed of having a bit 
+higher latency than systems like Apache Flink, but lower than Apache Spark, including better scalability 
+than those frameworks in addition to having capabilities for re-configuration.
 
 \hfill March 31, 2022
 
