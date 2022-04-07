@@ -11,95 +11,63 @@
 \maketitle
 
 \begin{abstract}
-This document lays out the inspiration for a re-configurable data stream processor.
-It is a general framework for data stream processing, which can be used to
-build a wide variety of data processing applications. The uniqueness of this
-framework is that it is designed to be re-configurable, and supports better scalability
-and fault tolerance for stateful applications compared to current industry standard solutions.
+This document lays out the inspiration for a re-configurable data stream processor. It is a general framework for data stream processing, which can be used to build a wide variety of data processing applications. The uniqueness of this framework is that it is designed to be re-configurable, and supports better scalability and fault tolerance for stateful applications compared to current industry standard solutions.
 \end{abstract}
 
 \section{Introduction}
 
-\IEEEPARstart{T}{he} current state of the art in data stream processing is software 
-frameworks like Apache Flink, Apache Spark, and Apache Storm. These frameworks all require 
-in some capacity a centralized component in its data pipeline. That often leads to a potential
-single point of failure or ease of congestion that creates bottlenecks during production. The idea
-is to create a stream processor that has a certain tradeoff which can be expressed of having a bit 
-higher latency than systems like Apache Flink, but lower than Apache Spark, including better scalability 
-than those frameworks in addition to having capabilities for re-configuration.
+\IEEEPARstart{T}{he} current state of the art in data stream processing is software frameworks like Apache Flink, Apache Spark, and Apache Storm. These frameworks all require in some capacity a centralized component in its data pipeline. That often leads to a potential single point of failure or ease of congestion that creates bottlenecks during production. The idea is to create a stream processor that has a certain tradeoff which can be expressed of having a bit higher latency than systems like Apache Flink, but lower than Apache Spark, including better scalability than those frameworks in addition to having capabilities for re-configuration.
 
 \hfill March 31, 2022
 
 \section{Requirements}
-Being able to scale up and down without downtime is a fundamental requirement for 
-this data stream processor. In addition, the processor should be decentralized in 
-its workers and enable fast failure recovery if a node were to suddenly disconnect.
-It would also need to deliver \textbf{at least once} processing guarantees when 
-ingesting incoming data. Current scope is to focus on the feasibility of a data 
-stream processor that can be used in a distributed environment.
+Being able to scale up and down without downtime is a fundamental requirement for this data stream processor. In addition, the processor should be decentralized in its workers and enable fast failure recovery if a node were to suddenly disconnect. It would also need to deliver \textbf{at least once} processing guarantees when ingesting incoming data. Current scope is to focus on the feasibility of a data stream processor that can be used in a distributed environment.
 \section{Goals}
 
 \begin{enumerate}
-\item Create MVP of a ring dataflow backend that allow nodes to come in and out of the 
-data processor.
+\item Create MVP of a ring dataflow backend that allow nodes to come in and out of the data processor.
 
-\item Give the ability to input data into the dataflow and have a sink that can recieve 
-the output.
+\item Give the ability to input data into the dataflow and have a sink that can recieve the output.
 
-\item Develop a MVP of a data stream processor that can support easy map reduce operations 
-(i.e. wordcount)
+\item Develop a MVP of a data stream processor that can support easy map reduce operations (i.e. wordcount)
 \end{enumerate}
 \section{Software Design}
 
-The dataflow network design is inspired by Chord, an implementation of a distributed hash table\ (DHT). 
-Chord creates a ring structure for the nodes and provies the ability to map a given key to some node.
+The dataflow network design is inspired by Chord, an implementation of a distributed hash table\ (DHT). Chord creates a ring structure for the nodes and provies the ability to map a given key to some node.
 
-As the Chord protocol supports the operation of load balancing in addition to mapping keys to nodes and controlling
-the behavior when the nodes are down, it is very helpful as the baseline for the data stream processor.
-The usage of finger tables within Chord provides a robust way to handle arbritrary node failures. In addition,
-this can also handle the scale up and down of nodes within the processor.
+As the Chord protocol supports the operation of load balancing in addition to mapping keys to nodes and controlling the behavior when the nodes are down, it is very helpful as the baseline for the data stream processor. The usage of finger tables within Chord provides a robust way to handle arbritrary node failures. In addition, this can also handle the scale up and down of nodes within the processor.
 
-The main purpose of Chord is very simple in its mission, \textit{provided a key, the protocol will
-return the node that is responsible for the key}. We use this property to back state operators so that
-when workers enter the ring or unexpectedly leaves, the state is still preserved and can be recovered.
+The main purpose of Chord is very simple in its mission, \textit{provided a key, the protocol will return the node that is responsible for the key}. We use this property to back state operators so that when workers enter the ring or unexpectedly leaves, the state is still preserved and can be recovered.
 
 \section{Modifications}
-Using the DHT implementation specified by Chord, we will modify it to support the map reduce 
-functionality. Instead of the traditional setting of value to a node, there will be new methods 
-that act as operators. For example instead of \texttt{setValue(value)} and letting Chord handle 
-the corresponding node, we will have \texttt{sumOperator(value)} and let Chord set the value, 
-and instruct the node to perform the sum operation. Similarly, we could have custom operators to 
-perform any actions needed, as it will be chained as a secondary set to after storing the data in their
-corresponding nodes.
+Using the DHT implementation specified by Chord, we will modify it to support the map reduce functionality. Instead of the traditional setting of value to a node, there will be new methods that act as operators. For example instead of \texttt{setValue(value)} and letting Chord handle the corresponding node, we will have \texttt{sumOperator(value)} and let Chord set the value, and instruct the node to perform the sum operation. Similarly, we could have custom operators to perform any actions needed, as it will be chained as a secondary set to after storing the data in their corresponding nodes.
 
 \subsection{Ring Design}
-The stream processor will maintain a ring of nodes. Each node contains a finger table containing
-up to $m$ entries, $m$ being the number of bits in the hash key. Each $i^{th}$ entry in the finger table
-of node $n$ contains the next node $successor$ which is the $((n + 2 ^ {i - 1})\ mod\ 2^m)$ node.
+The stream processor will maintain a ring of nodes. Each node contains a finger table containing up to $m$ entries, $m$ being the number of bits in the hash key. Each $i^{th}$ entry in the finger table of node $n$ contains the next node $successor$ which is the $((n + 2 ^ {i - 1})\ mod\ 2^m)$ node.
 
 \subsection{Event routing}
-Each time there is a new event from the data source, a node lookup event is distributed to a node in the
-ring in a round-robin fashion. The node lookup event contains information regarding the key of the event.
-Then, the node that recieves the event $e$ will respond to the source with their id so that the source can
-contact and send the event to the correct node. This is done to prevent bouncing the entire data event within
-the ring sturcture, which can induce high IO.
+Each time there is a new event from the data source, a node lookup event is distributed to a node in the ring in a round-robin fashion. The node lookup event contains information regarding the key of the event. Then, the node that recieves the event $e$ will respond to the source with their id so that the source can contact and send the event to the correct node. This is done to prevent bouncing the entire data event within the ring sturcture, which can induce high IO.
 
 
 \subsection{Ring stablization}
-To ensure that the ring is always up to date, some sort of stablization mechanism must be run periodically in
-the background so that the finger tables of the nodes are always correct.
+To ensure that the ring is always up to date, some sort of stabilization mechanism must be run periodically in the background so that the finger tables of the nodes are always correct.
 
-\subsubsection*{Ring joins}
+Similar to the original Chord protocol, when a new node joins, the following actions are performed:
+\begin{enumerate}
+\item Initialize node $n$ (the predecessor and the finger table).
+\item Notify other nodes to update their predecessors and finger tables.
+\item The new node takes over its responsible keys from its successor.
+\end{enumerate}
 
-\subsubsection*{Ring leaves}
+The stabilization algorithm that runs checks for dead nodes via heartbeat signals. The heartbeats are sent out by each node at the frequency of events that arrive as each node looks up where the event should be routed. For its next to its first successor to check their status, if there is no response, the node that discovered the dead successor will promote its next live successor to take their original place, closing the gap. The node will also take the key space of the dead node, and redistribute it among all nodes within its finger table.
 
-\subsubsection*{Heartbeat Check}
+When a worker leaves gracefully, it will also contact its predecessor so that the node will know immediately and run the stabilization algorithm.
 
 \section{Result sink}
 The result sink is a new sink that will be used to store the results of the map reduce operation. Since
 we want to minimize the need for network activity, all results will be fed into a single node. This node
 will be known as the \texttt{sink node}, and will be responsible for storing the results. This node does
-not participate within the ring, and can be seen as a seperate entity that is soley responsible for accepting
+not participate within the ring, and can be seen as a separate entity that is solely responsible for accepting
 results and perform de-duplication and aggregation. This part of design is currently in its infant stage, as
 having a single node responsible for result inherently introduces risk of failure.
 
