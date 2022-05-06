@@ -1,5 +1,7 @@
 \documentclass[journal]{IEEEtran}
 
+\usepackage{float}
+
 \ifCLASSINFOpdf
   \usepackage[pdftex]{graphicx}
 \else
@@ -62,6 +64,12 @@ Similar to the original Chord protocol, when a new node joins, the following act
 The stabilization algorithm that runs checks for dead nodes via heartbeat signals. The heartbeats are sent out by each node at the frequency of events that arrive as each node looks up where the event should be routed. For its next to its first successor to check their status, if there is no response, the node that discovered the dead successor will promote its next live successor to take their original place, closing the gap. The node will also take the key space of the dead node, and redistribute it among all nodes within its finger table.
 
 When a worker leaves gracefully, it will also contact its predecessor so that the node will know immediately and run the stabilization algorithm.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.25]{distributed_event_processing.png}
+  \caption{Dataflow Design}
+\end{figure}
 
 \section{Result sink}
 The result sink is a new sink that will be used to store the results of the map reduce operation. Since
