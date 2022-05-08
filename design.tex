@@ -13,7 +13,7 @@
 \maketitle
 
 \begin{abstract}
-This document lays out the inspiration for a re-configurable data stream processor. It is a general framework for data stream processing, which can be used to build a wide variety of data processing applications. The uniqueness of this framework is that it is designed to be re-configurable, and supports better scalability and fault tolerance for stateful applications compared to current industry standard solutions.
+This document lays out the inspiration for a re-configurable data stream processor. It is a general framework for data stream processing, which can be used to build a wide variety of data processing applications. The uniqueness of this framework is that it is designed to be re-configurable, and supports better scalability and fault tolerance for stateful applications compared to current industry standard solutions. We take this novel stream data processor and compare it to a baseline to see it's overhead of leverage a distributed enviroment.
 \end{abstract}
 
 \section{Introduction}
@@ -88,4 +88,5 @@ failure issue and allow for a more robust sinking mechanism for the stream proce
 \section{Baseline comparison}
 A baseline benchmark to compare the novel distributed solution to will be required to measure and quantify the overhead that such a system would generate. To measure this, a simple word count baseline benchmark is also developed in golang to provide some kind of comparison to show. The target file to be counted is the entirety of Shakespear's works, which is then multiplied $100$ times to provide some large amount of text for the processor to count.
 
+Some changes
 \end{document}
