@@ -71,6 +71,8 @@ When a worker leaves gracefully, it will also contact its predecessor so that th
   \caption{Dataflow Design}
 \end{figure}
 
+A sample graphic in figure 1 shows what a distributed stream processor would look like. Two upstream operators would have knowlege of two nodes within the network. One assumption is made here that given $n$ upstream operators, only $n-1$ amount of nodes that are binded to the upstream operators will fail together at any given time. If all nodes in the network that the upstream operators has knowledge about fails, the chord network would be stablized however it will lose contact with the upstream operator all together.
+
 \section{Result sink}
 The result sink is a new sink that will be used to store the results of the map reduce operation. Since
 we want to minimize the need for network activity, all results will be fed into a single node. This node
@@ -82,5 +84,8 @@ having a single node responsible for result inherently introduces risk of failur
 In addition to an independent result sink, there is also a per node independent sink that could be used
 if the data does not need to be aggregated or de-duplicated. This would then resolve the single point of
 failure issue and allow for a more robust sinking mechanism for the stream processor.
+
+\section{Baseline comparison}
+A baseline benchmark to compare the novel distributed solution to will be required to measure and quantify the overhead that such a system would generate. To measure this, a simple word count baseline benchmark is also developed in golang to provide some kind of comparison to show. The target file to be counted is the entirety of Shakespear's works, which is then multiplied $100$ times to provide some large amount of text for the processor to count.
 
 \end{document}
