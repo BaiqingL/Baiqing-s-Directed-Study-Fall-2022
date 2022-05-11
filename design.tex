@@ -118,7 +118,9 @@ func WordCount(s string) map[string]int {
 }
 \end{lstlisting}
 
-The baseline word count is then ran $10$ times and the execution time is taken then averaged to produce the final result. On a M1 Max processor, the average time of execution across 10 trials is \texttt{123.527422479} seconds.
+It is important to note that there is still an "upstream operator" that sends the words through a gRPC call to a downstream "operator" that increments in their respective map. This is done to emulate the network flow of the distributed stream data processor.
+
+The baseline word count is then ran $10$ times and the execution time is taken then averaged to produce the final result. On a M1 Max processor, the average time of execution across 10 trials is \texttt{41.527422479} seconds.
 
 \subsection{Distributed Stream Processor}
 A similar process is used for benchmarking the distributed stream processor. The same 10 trials is run on top of the processor and an average is taken to get a comprehensive view on its average run times. The upstream operator is given the word file for it to be read and propagated throughout the system. One difference from this experiment is the amount of nodes chosen to exist in the chord network. The rationale is that with the increase in nodes, the more potential hopes data might need to take for it to travel to its responsible node. So as a test, the chord network is benchmarked on several node counts.
@@ -138,5 +140,9 @@ A similar process is used for benchmarking the distributed stream processor. The
 
 \section{Discussion}
 It is clear that the chord protocol establishes an overhead, however it is surprising to see that the overhead is such a degree. This may be due to a couple of reasons. First being that gRPC might be saturating the internal networking bandwidth, however this is unlikely as the M1 Max processors support bandwidth of multi gigabit connections which should not be affected by one workload. Another possible issue is the amount of routing each request needs within the node, and this frequent lookups may have caused a hiccup. Finally, the node lookup process is not yet parallelized, which can create problems under massive workloads.
+
+Some optimizations can be applied here. The first being caching an estimated key range where upstream operators can supply a watermark to the search request, which the target node will respond by acknowledgement to the gateway. This can allow the gateway to keep track and potentially enumerate a key range and if a certain key falls between that range, it can directly send the message across eliminating the hops in between nodes.
+
+Another optimization that could be applied it to do network level optimizations of gRPC. Enforcing TCP stream reuse across all operations is a must as this decreases the times it takes to dial new connections to certain nodes. This approach however compromises the idea of having upstream nodes establishing connections to only gateway nodes, as it would require some connection between nodes within the Chord network to the upstream nodes as well.
 
 \end{document}
