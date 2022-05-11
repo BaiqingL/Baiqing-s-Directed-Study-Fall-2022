@@ -103,7 +103,7 @@ failure issue and allow for a more robust sinking mechanism for the stream proce
 \section{Benchmark}
 
 \subsection{Baseline}
-To discover the overhead of how much using a distributed processor would entail, we design a simple word count benchmark and execute it on the same machine. The benchmark features the entire works of William Shakespeare's works multiplied 100 times, as to add processing time for the machine. The whole text file is around 500MiB in size and contains 900 million words. As the distributed event processor is developed in Go, a similar baseline wordcount is also created in Go to eliminate differences between programming languages.
+To discover the overhead of how much using a distributed processor would entail, we design a simple word count benchmark and execute it on the same machine. The benchmark features the entire works of William Shakespeare's works multiplied several times, as to add processing time for the machine. The whole text file is around 300MiB in size and contains 1 million words. As the distributed event processor is developed in Go, a similar baseline wordcount is also created in Go to eliminate differences between programming languages.
 
 The baseline program is a simple go program that reads in a text file, and scans them through word by word incrementing each key in a hashmap. The general algorithm is below:
 
@@ -118,23 +118,25 @@ func WordCount(s string) map[string]int {
 }
 \end{lstlisting}
 
-The baseline word count is then ran $10$ times and the execution time is taken then averaged to produce the final result. On a M1 Max processor, the average time of execution across 10 trials is \texttt{3.527422479} seconds.
+The baseline word count is then ran $10$ times and the execution time is taken then averaged to produce the final result. On a M1 Max processor, the average time of execution across 10 trials is \texttt{123.527422479} seconds.
 
 \subsection{Distributed Stream Processor}
-A similar process is used for benchmarking the distributed stream processor. The same 10 trials is run on top of the processor and an average is taken to get a comprehensive view on its average run times. The upstream operator is given the word file for it to be read and propagated throughout the system. One difference from this experiment is the amount of nodes chosen to exist in the chord network. The rationale is that with the increase in nodes, the more potential hopes data might need to take for it to travel to its responsible node. So as a test, the chord network is benchmarked on the existence of 2, 5 and 10 nodes.
-
+A similar process is used for benchmarking the distributed stream processor. The same 10 trials is run on top of the processor and an average is taken to get a comprehensive view on its average run times. The upstream operator is given the word file for it to be read and propagated throughout the system. One difference from this experiment is the amount of nodes chosen to exist in the chord network. The rationale is that with the increase in nodes, the more potential hopes data might need to take for it to travel to its responsible node. So as a test, the chord network is benchmarked on several node counts.
 \begin{center}
 \begin{tabular}{|c|c|} 
  \hline
  Nodes & Runtime (Seconds) \\ [0.5ex] 
  \hline
- 2 & ? \\ 
+ 2 & 141.61 \\ 
  \hline
- 5 & ?  \\
+ 5 & 155.75 \\
  \hline
- 10 & ? \\
+ 10 & 334.33 \\
  \hline
 \end{tabular}
 \end{center}
+
+\section{Discussion}
+It is clear that the chord protocol establishes an overhead, however it is surprising to see that the overhead is such a degree. This may be due to a couple of reasons. First being that gRPC might be saturating the internal networking bandwidth, however this is unlikely as the M1 Max processors support bandwidth of multi gigabit connections which should not be affected by one workload. Another possible issue is the amount of routing each request needs within the node, and this frequent lookups may have caused a hiccup. Finally, the node lookup process is not yet parallelized, which can create problems under massive workloads.
 
 \end{document}
